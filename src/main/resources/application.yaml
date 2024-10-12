@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: 07-SpringSecurity
+  datasource:
+    url: jdbc:h2:mem:springsec
+    username: sa
+    password: springsec
+  jpa:
+    hibernate:
+      ddl-auto: none # We gaan schema.sql gebruiken
+    show-sql: true # Toon SQL statements (handig voor debugging)
+    properties:
+      hibernate:
+        format_sql: true # Format SQL statements
+        auto_quote_keyword: true # Fixt probleem met tables zoals "user"
+  h2:
+    # Enable H2 console: gaat voorlopig nog niet werken, want Spring Security blokkeert toegang
+    console:
+      enabled: true
+      path: /h2-console

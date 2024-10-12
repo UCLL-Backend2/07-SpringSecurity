@@ -1,5 +1,6 @@
 package be.ucll.backend2.springsec.controller;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,7 +12,7 @@ public class HelloController {
     }
 
     @GetMapping
-    public HelloDto hello() {
-        return new HelloDto("Hello");
+    public HelloDto hello(Authentication authentication) {
+        return new HelloDto("Hello, " + authentication.getName());
     }
 }

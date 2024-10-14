@@ -1,13 +1,17 @@
 package be.ucll.backend2.springsec.config;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @Configuration
 public class SecurityConfig {
@@ -17,6 +21,22 @@ public class SecurityConfig {
     }
 
     @Bean
+    @Order(0)
+    @ConditionalOnProperty(name = "spring.h2.console.enabled", havingValue = "true")
+    public SecurityFilterChain h2SecurityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .securityMatcher(toH2Console())
+                .csrf(AbstractHttpConfigurer::disable)
+                // Geen HTTP basic nodig (H2 doet sec zelf!)
+                .headers(headers -> headers.frameOptions(frameOptionsConfig -> frameOptionsConfig.disable()))
+                .authorizeHttpRequests(
+                        authorizeRequests -> authorizeRequests.anyRequest().permitAll()
+                )
+                .build();
+    }
+
+    @Bean
+    @Order(1)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)

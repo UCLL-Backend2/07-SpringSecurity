@@ -23,13 +23,22 @@ public class User {
     @Column(nullable = false)
     private String lastName;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
     protected User() {}
 
-    public User(String emailAddress, String password, String firstName, String lastName) {
+    public User(String emailAddress,
+                String password,
+                String firstName,
+                String lastName,
+                Role role) {
         this.emailAddress = emailAddress;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.role = role;
     }
 
     public Long getId() {
@@ -70,5 +79,13 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

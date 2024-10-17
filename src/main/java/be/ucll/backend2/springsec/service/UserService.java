@@ -1,6 +1,7 @@
 package be.ucll.backend2.springsec.service;
 
 import be.ucll.backend2.springsec.controller.dto.RegisterUserDto;
+import be.ucll.backend2.springsec.entity.Role;
 import be.ucll.backend2.springsec.entity.User;
 import be.ucll.backend2.springsec.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,7 +23,8 @@ public class UserService {
                 registerUserDto.emailAddress(),
                 hashedPassword,
                 registerUserDto.firstName(),
-                registerUserDto.lastName()
+                registerUserDto.lastName(),
+                Role.User
         );
         return userRepository.save(user);
     }

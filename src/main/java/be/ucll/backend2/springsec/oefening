@@ -1,0 +1,14 @@
+Om admin rol te checken:
+@PreAuthorize("hasRole('ADMIN')")
+of:
+Authentication#getAuthorities(): zoek op SimpleGrantedGrantedAuthority("ROLE_ADMIN")
+
+PUT /api/v1/user/{id} endpoint
+
+- Admins mogen alle users updaten
+- Enkel admins mogen de rol van een gebruiker aanpassen
+- Users mogen enkel zichzelf aanpassen (maar niet de rol)
+
+GET /api/v1/user endpoint
+
+- Enkel admins mogen alle users ophalen

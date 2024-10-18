@@ -18,6 +18,11 @@ spring:
     console:
       enabled: true
       path: /h2-console
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          authority-prefix: ""
 logging:
   level:
     org.springframework.security: DEBUG

@@ -1,5 +1,6 @@
 package be.ucll.backend2.springsec.service;
 
+import be.ucll.backend2.springsec.config.JwtProperties;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -7,24 +8,27 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 
 @Service
 public class JwtService {
     private final JwtEncoder jwtEncoder;
+    private final JwtProperties jwtProperties;
 
-    public JwtService(JwtEncoder jwtEncoder) {
+    public JwtService(JwtEncoder jwtEncoder,
+                      JwtProperties jwtProperties) {
         this.jwtEncoder = jwtEncoder;
+        this.jwtProperties = jwtProperties;
     }
 
     public String createToken(long id, String emailAddress, List<String> scopes) {
         final var now = Instant.now();
+        final var expiresAt = now.plus(jwtProperties.token().lifetime());
         final var claims = JwtClaimsSet.builder()
-                .issuer("self")
+                .issuer(jwtProperties.token().issuer())
                 .issuedAt(now)
-                .expiresAt(now.plus(Duration.ofMinutes(30)))
+                .expiresAt(expiresAt)
                 .subject(Long.toString(id))
                 .claim("email", emailAddress)
                 .claim("scope", scopes)

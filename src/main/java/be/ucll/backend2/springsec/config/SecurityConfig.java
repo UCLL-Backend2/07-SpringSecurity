@@ -1,6 +1,7 @@
 package be.ucll.backend2.springsec.config;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.h2.H2ConsoleProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -24,7 +25,7 @@ public class SecurityConfig {
 
     @Bean
     @Order(0)
-    @ConditionalOnProperty(name = "spring.h2.console.enabled", havingValue = "true")
+    @ConditionalOnBean(H2ConsoleProperties.class)
     public SecurityFilterChain h2SecurityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .securityMatcher(toH2Console())

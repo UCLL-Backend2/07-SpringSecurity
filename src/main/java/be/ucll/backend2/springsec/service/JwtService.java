@@ -19,6 +19,7 @@ public class JwtService {
     }
 
     public String createToken(Authentication authentication) {
+        final var user = ((UserDetailsImpl) authentication.getPrincipal()).user();
         final var now = Instant.now();
         final var scopes =
                 authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
@@ -26,7 +27,8 @@ public class JwtService {
                 .issuer("self")
                 .issuedAt(now)
                 .expiresAt(now.plus(Duration.ofMinutes(30)))
-                .subject(authentication.getName())
+                .subject(user.getId().toString())
+                .claim("email", user.getEmailAddress())
                 .claim("scope", scopes)
                 .build();
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();

@@ -46,9 +46,6 @@ public class UserService {
                 .findById(id)
                 .orElseThrow(
                         () -> new EntityNotFoundException("User with id " + id + " not found"));
-        if (!isAdmin && !user.getEmailAddress().equals(authentication.getName())) {
-            throw new AccessDeniedException("Not allowed to change user with id " + id);
-        }
         if (userUpdate.getEmailAddress() != null) {
             user.setEmailAddress(userUpdate.getEmailAddress());
         }

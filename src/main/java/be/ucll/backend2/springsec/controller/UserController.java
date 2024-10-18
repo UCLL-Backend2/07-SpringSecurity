@@ -23,6 +23,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') || principal.username == #id")
     public User updateUser(@PathVariable long id,
                            @RequestBody User user) {
         return userService.updateUser(id, user);

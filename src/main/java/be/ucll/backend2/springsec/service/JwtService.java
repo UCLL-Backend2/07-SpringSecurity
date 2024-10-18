@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 
 @Service
 public class JwtService {
@@ -18,19 +19,23 @@ public class JwtService {
         this.jwtEncoder = jwtEncoder;
     }
 
-    public String createToken(Authentication authentication) {
-        final var user = ((UserDetailsImpl) authentication.getPrincipal()).user();
+    public String createToken(long id, String emailAddress, List<String> scopes) {
         final var now = Instant.now();
-        final var scopes =
-                authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
         final var claims = JwtClaimsSet.builder()
                 .issuer("self")
                 .issuedAt(now)
                 .expiresAt(now.plus(Duration.ofMinutes(30)))
-                .subject(user.getId().toString())
-                .claim("email", user.getEmailAddress())
+                .subject(Long.toString(id))
+                .claim("email", emailAddress)
                 .claim("scope", scopes)
                 .build();
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+    }
+
+    public String createToken(Authentication authentication) {
+        final var user = ((UserDetailsImpl) authentication.getPrincipal()).user();
+        final var scopes =
+                authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+        return createToken(user.getId(), user.getEmailAddress(), scopes);
     }
 }

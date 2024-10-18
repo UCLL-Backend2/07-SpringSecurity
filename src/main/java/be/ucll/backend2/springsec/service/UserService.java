@@ -49,11 +49,16 @@ public class UserService {
         if (!isAdmin && !user.getEmailAddress().equals(authentication.getName())) {
             throw new AccessDeniedException("Not allowed to change user with id " + id);
         }
-        user.setEmailAddress(userUpdate.getEmailAddress());
-        user.setPassword(passwordEncoder.encode(userUpdate.getPassword()));
-        user.setFirstName(userUpdate.getFirstName());
-        user.setLastName(userUpdate.getLastName());
-        if (isAdmin) {
+        if (userUpdate.getEmailAddress() != null) {
+            user.setEmailAddress(userUpdate.getEmailAddress());
+        }
+        if (userUpdate.getFirstName() != null) {
+            user.setFirstName(userUpdate.getFirstName());
+        }
+        if (userUpdate.getLastName() != null) {
+            user.setLastName(userUpdate.getLastName());
+        }
+        if (isAdmin && userUpdate.getRole() != null) {
             user.setRole(userUpdate.getRole());
         }
         return userRepository.save(user);

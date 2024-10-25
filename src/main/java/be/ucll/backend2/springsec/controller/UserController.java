@@ -3,6 +3,7 @@ package be.ucll.backend2.springsec.controller;
 import be.ucll.backend2.springsec.entity.User;
 import be.ucll.backend2.springsec.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,9 +24,10 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') || principal.username == #id")
+    @PreAuthorize("hasRole('ADMIN') || authentication.name == '' + #id")
     public User updateUser(@PathVariable long id,
-                           @RequestBody User user) {
-        return userService.updateUser(id, user);
+                           @RequestBody User user,
+                           Authentication authentication) {
+        return userService.updateUser(authentication, id, user);
     }
 }

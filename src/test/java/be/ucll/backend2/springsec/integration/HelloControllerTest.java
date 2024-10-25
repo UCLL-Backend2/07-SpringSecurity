@@ -17,7 +17,7 @@ public class HelloControllerTest {
 
     @Test
     @WithMockUser(username = "jos@example.com")
-    public void whenGetHelloIsRequested_thenHelloMessageIsReturned() {
+    public void givenUserIsAuthenticated_whenGetHelloIsRequested_thenHelloMessageIsReturned() {
         client.get()
                 .uri("/api/v1/hello")
                 .exchange()

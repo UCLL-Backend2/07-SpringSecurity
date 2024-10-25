@@ -5,9 +5,8 @@ import be.ucll.backend2.springsec.entity.Role;
 import be.ucll.backend2.springsec.entity.User;
 import be.ucll.backend2.springsec.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,8 +38,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User updateUser(long id, User userUpdate) {
-        final var authentication = SecurityContextHolder.getContext().getAuthentication();
+    public User updateUser(Authentication authentication, long id, User userUpdate) {
         final var isAdmin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
         final var user = userRepository
                 .findById(id)

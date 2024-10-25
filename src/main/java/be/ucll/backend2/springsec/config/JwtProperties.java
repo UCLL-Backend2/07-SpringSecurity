@@ -9,7 +9,8 @@ import java.security.interfaces.RSAPublicKey;
 import java.time.Duration;
 
 @ConfigurationProperties(prefix = "jwt")
-public record JwtProperties(Keys keys, Token token) {
+public record JwtProperties(@DefaultValue Keys keys,
+                            @DefaultValue Token token) {
     public record Keys(@Name("public") RSAPublicKey publicKey,
                        @Name("private") RSAPrivateKey privateKey) {}
     public record Token(@DefaultValue("self") String issuer,

@@ -4,7 +4,7 @@ import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.h2.H2ConsoleProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -29,7 +29,7 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 
 @Configuration
 @EnableMethodSecurity
-@EnableConfigurationProperties(JwtProperties.class)
+@EnableConfigurationProperties({JwtProperties.class, H2ConsoleProperties.class})
 public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -38,7 +38,7 @@ public class SecurityConfig {
 
     @Bean
     @Order(0)
-    @ConditionalOnBean(H2ConsoleProperties.class)
+    @ConditionalOnProperty(prefix = "spring.h2.console", name = "enabled", havingValue = "true")
     public SecurityFilterChain h2SecurityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .securityMatcher(toH2Console())
